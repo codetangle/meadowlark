@@ -16,11 +16,12 @@ var fortune = require('./lib/fortune.js');
 // Set up static folder
 app.use(express.static(__dirname + '/public'));
 
-app.use(req, res, next) {
+// Set up query string to turn on test
+app.use(function(req, res, next) {
     res.locals.showTest = app.get('env') !== 'production' &&
         req.query.test === '1';
     next();
-}
+});
 
 //Routes
 // custom home page
@@ -30,7 +31,10 @@ app.get('/', function(req, res) {
 
 // custom about page
 app.get('/about', function(req, res) {
-    res.render('about', { fortune: fortune.getFortune() });
+    res.render('about', {
+        fortune: fortune.getFortune(),
+        pageTestScript: '/qa/tests-about.js'
+    });
 });
 
 // custom 404 page
