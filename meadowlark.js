@@ -11,7 +11,7 @@ app.set('view engine', 'handlebars');
 app.set('port', process.env.PORT || 3000);
 
 // Add custom fortune module
-var fortune = requite('./lib/fortune.js');
+var fortune = require('./lib/fortune.js');
 
 // Set up static folder
 app.use(express.static(__dirname + '/public'));
@@ -21,18 +21,9 @@ app.get('/', function(req, res) {
     res.render('home');
 });
 
-var fortunes = [
-    "If you conquer your fears you will conquer the world.",
-    "Rivers not only deliver water, but life.",
-    "No unknown is worth your fear.",
-    "A pleasant surprise awaits you in the near future.",
-    "Whenever possible make things simpler."
-];
-
 // custom about page
 app.get('/about', function(req, res) {
-    var randomFortune = fortunes[Math.floor(Math.random() * fortunes.length)];
-    res.render('about', { fortune: randomFortune });
+    res.render('about', { fortune: fortune.getFortune() });
 });
 
 // custom 404 page
