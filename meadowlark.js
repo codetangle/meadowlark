@@ -37,6 +37,16 @@ app.get('/about', function(req, res) {
     });
 });
 
+// Hood river tour
+app.get('/tours/hood-river', function(req, res) {
+    res.render('tours/hood-river');
+});
+
+// Request Group Rates
+app.get('/tours/request-group-rate', function(req, res) {
+    res.render('tours/request-group-rate');
+});
+
 // custom 404 page
 app.use(function(req, res, next) {
     res.status(404);
