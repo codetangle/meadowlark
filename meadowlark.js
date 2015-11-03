@@ -16,6 +16,13 @@ var fortune = require('./lib/fortune.js');
 // Set up static folder
 app.use(express.static(__dirname + '/public'));
 
+app.use(req, res, next) {
+    res.locals.showTest = app.get('env') !== 'production' &&
+        req.query.test === '1';
+    next();
+}
+
+//Routes
 // custom home page
 app.get('/', function(req, res) {
     res.render('home');
