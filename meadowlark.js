@@ -47,6 +47,17 @@ app.get('/tours/request-group-rate', function(req, res) {
     res.render('tours/request-group-rate');
 });
 
+// View headers
+app.get('/headers', function(req, res) {
+    res.set('Content-Type', 'text/plain');
+    res.set('Custom-Header', 'i-make-this-up');
+    var s = '';
+    for(var name in req.headers) {
+        s += name + ': ' + req.headers[name] + '\n';
+    }
+    res.send(s);
+});
+
 // custom 404 page
 app.use(function(req, res, next) {
     res.status(404);
