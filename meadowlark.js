@@ -19,6 +19,9 @@ var bodyParser = require('body-parser');
 // Add custom fortune module
 var fortune = require('./lib/fortune.js');
 
+// For handling file uploads
+var formidable = require('formidable');
+
 // Set up static folder
 app.use(express.static(__dirname + '/public'));
 
@@ -79,15 +82,40 @@ app.post('/process', function(req, res) {
         console.log('Else was triggered');
         res.redirect(303, '/thank-you');
     }
-    // console.log('Query Data');
-    // console.log(req.query);
-    // console.log('Body data');
-    // console.log(req.body);
-    // res.redirect(303, '/thank-you');
+});
+
+// Vacation photo upload page
+app.get('/contest/vacation-photo', function(req, res) {
+    var now = new Date();
+    res.render('contest/vacation-photo', {
+        year: now.getFullYear(),
+        month: now.getMonth()
+    });
+});
+
+// Url to process vacation photo uploads
+app.post('/contest/vacation-photo/:year/:month', function(req, res) {
+    var form = new formidable.IncomingForm();
+    form.parse(req, function(err, fields, files) {
+        if(err) {
+            console.log('And the error was');
+            console.log(err);
+            return res.redirect(303, '/error');
+        }
+        console.log('Received fields');
+        console.log(fields);
+        console.log('Received files');
+        console.log(files);
+        res.redirect(303, '/thank-you');
+    });
 });
 
 app.get('/thank-you', function(req, res) {
     res.render('thankyou');
+});
+
+app.get('/error', function(req, res) {
+    res.render('error');
 });
 
 // Hood river tour
