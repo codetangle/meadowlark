@@ -73,11 +73,17 @@ app.get('/newsletter', function(req, res) {
 });
 
 app.post('/process', function(req, res) {
-    console.log('Query Data');
-    console.log(req.query);
-    console.log('Body data');
-    console.log(req.body);
-    res.redirect(303, '/thank-you');
+    if(req.xhr || req.accepts('json') === 'json' || req.accepts('html') === 'html') {
+        res.send({ success: true });
+    } else {
+        console.log('Else was triggered');
+        res.redirect(303, '/thank-you');
+    }
+    // console.log('Query Data');
+    // console.log(req.query);
+    // console.log('Body data');
+    // console.log(req.body);
+    // res.redirect(303, '/thank-you');
 });
 
 app.get('/thank-you', function(req, res) {
