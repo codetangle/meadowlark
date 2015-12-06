@@ -1,0 +1,9 @@
+<h2>Test Form Page!</h2>
+<form class="form-horizontal" role="form" action="/test-form?form=testForm" method="POST">
+	<input type="hidden" name="_csrf" value="{{csrf}}">
+	<label for="fieldName" class="col-sm-2 control-label">Name</label>
+	<input type="text" class="form-control" id="fieldname" name="name">
+	<label for="fieldEmail" class="col-sm-2 control-label">Email</label>
+	<input type="email" class="form-control" required id="fieldName" name="email">
+	<button type="submit" class="btn btn-default">Register</button>
+</form>

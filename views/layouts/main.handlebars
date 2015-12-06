@@ -5,7 +5,7 @@
 	{{#if showTest}}
 		<link rel="stylesheet" type="text/css" href="/vendor/mocha.css">
 	{{/if}}
-	<script src="//code.jquery.com/jquery-2.0.2.min.js" type="text/javascript"></script>
+	{{{_sections.head}}}
 </head>
 <body>
 	<header>
@@ -27,5 +27,8 @@
 		{{/if}}
 		<script>mocha.run();</script>
 	{{/if}}
+
+	<script src="//code.jquery.com/jquery-2.0.2.min.js" type="text/javascript"></script>
+	{{{_sections.jquery}}}
 </body>
 </html>

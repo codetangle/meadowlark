@@ -3,18 +3,35 @@ var express = require('express');
 var app = express();
 
 // set up handlebars view engine
-var handlebars = require('express3-handlebars')
-	.create({ defaultLayout: 'main' });
-app.engine('handlebars', handlebars.engine);
-app.set('view engine', 'handlebars');
+var handlebars = require('express3-handlebars').create({
+    defaultLayout: 'main',
+    helpers: {
+        section: function(name, options) {
+            if(!this._sections) this._sections = {};
+            this._sections[name] = options.fn(this);
+            return null;
+        }
+    }
+});
 
-app.set('port', process.env.PORT || 3000);
+var bodyParser = require('body-parser');
 
 // Add custom fortune module
 var fortune = require('./lib/fortune.js');
 
 // Set up static folder
 app.use(express.static(__dirname + '/public'));
+
+// Set up handlebars templates
+app.engine('handlebars', handlebars.engine);
+app.set('view engine', 'handlebars');
+
+// Set port
+app.set('port', process.env.PORT || 3000);
+
+// Set up middleware to parse URL-encoded body
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 // Set up query string to turn on test
 app.use(function(req, res, next) {
@@ -37,6 +54,36 @@ app.get('/about', function(req, res) {
     });
 });
 
+// Form test page
+app.get('/test', function(req, res) {
+    res.render('testform');
+});
+
+app.post('/test-form', function(req, res) {
+    console.log('Query Data');
+    console.log(req.query);
+    console.log('Body data');
+    console.log(req.body);
+    res.redirect(303, '/thank-you');
+});
+
+// Newsletter Sign Up
+app.get('/newsletter', function(req, res) {
+    res.render('newsletter', {csrf: 'CSRF token goes here'});
+});
+
+app.post('/process', function(req, res) {
+    console.log('Query Data');
+    console.log(req.query);
+    console.log('Body data');
+    console.log(req.body);
+    res.redirect(303, '/thank-you');
+});
+
+app.get('/thank-you', function(req, res) {
+    res.render('thankyou');
+});
+
 // Hood river tour
 app.get('/tours/hood-river', function(req, res) {
     res.render('tours/hood-river');
@@ -45,6 +92,10 @@ app.get('/tours/hood-river', function(req, res) {
 // Request Group Rates
 app.get('/tours/request-group-rate', function(req, res) {
     res.render('tours/request-group-rate');
+});
+
+app.get('/jquery-test', function(req, res) {
+    res.render('jquery-tests');
 });
 
 // View headers
