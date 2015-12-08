@@ -1,5 +1,4 @@
 var express = require('express');
-
 var app = express();
 
 // set up handlebars view engine
@@ -22,6 +21,16 @@ var fortune = require('./lib/fortune.js');
 // For handling file uploads
 var formidable = require('formidable');
 
+// Load credentials
+var credentials = require('./credentials.js')
+
+var cookieParser = require('cookie-parser');
+var sessions = require('express-session');
+
+// Load cookie information
+app.use(cookieParser(credentials.cookieSecret));
+app.use(sessions());
+
 // Set up static folder
 app.use(express.static(__dirname + '/public'));
 
@@ -43,10 +52,27 @@ app.use(function(req, res, next) {
     next();
 });
 
+// If there is a flash message add it to the context then delete it
+app.use(function(req, res, next) {
+    res.locals.flash = req.session.flash;
+    delete req.session.flash;
+    next();
+});
+
 //Routes
 // custom home page
 app.get('/', function(req, res) {
+    res.cookie('monster', 'nom nom');
+    res.cookie('signed_monster', 'more nomming', { signed: true });
     res.render('home');
+});
+
+// Test client cookies
+app.get('/cookies', function(req, res) {
+    res.render('cookies', {
+        cookies: req.cookies.monster,
+        signed_cookies: req.signedCookies.signed_monster
+    });
 });
 
 // custom about page
